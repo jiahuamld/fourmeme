@@ -1,5 +1,24 @@
 import { NextResponse } from 'next/server';
-import pool from '@/lib/db';
+import pool, { queryWithRetry } from '@/lib/db';
+
+interface Token {
+  id: number;
+  token_img_url: string;
+  token_name: string;
+  ticker_symbol: string;
+  token_description: string;
+  raised_token: string;
+  market_cap: string;
+  volume_24h: string;
+  website_url: string;
+  twitter_url: string;
+  telegram_url: string;
+  tags: string[];
+  chain: string;
+  address: string;
+  created_at: string;
+  updated_at: string;
+}
 
 // 删除旧表并创建新表的SQL
 const dropTableSQL = `DROP TABLE IF EXISTS tokens;`;
@@ -28,8 +47,8 @@ const createTableSQL = `
 // 初始化表
 async function initializeTable() {
   try {
-    await pool.query(dropTableSQL);
-    await pool.query(createTableSQL);
+    await queryWithRetry(dropTableSQL);
+    await queryWithRetry(createTableSQL);
     console.log('表结构更新成功');
   } catch (err) {
     console.error('创建表失败:', err);
@@ -72,7 +91,7 @@ export async function GET(request: Request) {
       );
     }
 
-    const result = await pool.query(`
+    const result = await queryWithRetry<Token>(`
       SELECT * FROM tokens 
       ORDER BY ${sort} ${order}
     `);
@@ -133,7 +152,7 @@ export async function POST(request: Request) {
       );
     }
     
-    const result = await pool.query(
+    const result = await queryWithRetry<Token>(
       `INSERT INTO tokens (
         token_img_url,
         token_name,
