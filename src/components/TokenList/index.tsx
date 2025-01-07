@@ -180,11 +180,9 @@ export function TokenList() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-
-      
+    <div className="container mx-auto px-2 py-8">
       {/* Sort buttons */}
-      <div className="flex gap-4 mb-6">
+      <div className="flex gap-4 mb-6 px-1">
         <button
           onClick={() => handleSort('market_cap')}
           className={`px-4 py-2 rounded flex items-center gap-1 ${
@@ -215,66 +213,47 @@ export function TokenList() {
       </div>
 
       {/* Token list */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      <div className="flex flex-wrap gap-2">
         {tokens.length === 0 ? (
-          <div className="col-span-4 text-center text-gray-500">
+          <div className="w-full text-center text-gray-500">
             No data available
           </div>
         ) : (
           tokens.map((token) => (
-            <div key={token.id} className="bg-white rounded-lg shadow-lg overflow-hidden w-[240px] hover:shadow-xl transition-shadow">
+            <div key={token.id} className="bg-black rounded-lg shadow-lg overflow-hidden w-[180px] hover:shadow-xl transition-shadow">
               <Link href={`/token/${token.address}`} className="block">
-                <div className="relative aspect-square">
+                <div className="relative aspect-square bg-black">
                   <img
                     src={decodeImageUrl(token.token_img_url)}
                     alt={token.token_name}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white to-transparent h-12"></div>
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-6"></div>
                 </div>
-                <div className="p-2">
-                  <div className="mb-2">
-                    <h2 className="text-base font-bold truncate">{token.token_name}</h2>
-                    <p className="text-gray-500 text-xs">{token.ticker_symbol}</p>
+                <div className="p-1 bg-black">
+                  <div className="mb-1">
+                    <p className="text-[8px] text-emerald-400 font-medium truncate mb-0.5">Created by: {token.address.slice(0, 8)}...{token.address.slice(-6)}</p>
+                    <h2 className="text-sm font-bold truncate text-white tracking-wide">
+                      {token.token_name} <span className="text-[10px]">({token.ticker_symbol})</span>
+                    </h2>
                   </div>
                   
-                  <div className="mb-2">
-                    <p className="text-xs text-gray-600 line-clamp-2">{token.token_description}</p>
+                  <div className="mb-1.5">
+                    <p className="text-[9px] text-gray-300/80 line-clamp-2 leading-relaxed">{token.token_description}</p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 mb-2">
+                  <div className="flex justify-between items-center">
                     <div>
-                      <p className="text-xs text-gray-500">Market Cap</p>
-                      <p className="font-bold text-xs">${formatNumber(token.market_cap)}</p>
+                      <p className="text-[9px] text-gray-400 uppercase tracking-wider font-medium">Market Cap</p>
+                      <p className="font-bold text-xs text-gray-400">${formatNumber(token.market_cap)}</p>
                     </div>
-                    <div>
-                      <p className="text-xs text-gray-500">24h Volume</p>
-                      <p className="font-bold text-xs">${formatNumber(token.volume_24h)}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-1 mb-2">
-                    {token.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-1.5 py-0.5 bg-blue-100 text-blue-600 rounded-full text-[10px]"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="flex justify-between items-center text-[10px]">
-                    <span className="bg-purple-100 text-purple-600 px-1.5 py-0.5 rounded">
-                      {token.chain}
-                    </span>
                     <div className="flex gap-1.5">
                       {token.website_url && (
                         <a
                           href={token.website_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-500 hover:text-blue-700"
+                          className="text-gray-400 hover:text-white transition-colors text-xs"
                         >
                           🌐
                         </a>
@@ -284,7 +263,7 @@ export function TokenList() {
                           href={token.twitter_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-500 hover:text-blue-700"
+                          className="text-gray-400 hover:text-white transition-colors text-xs"
                         >
                           𝕏
                         </a>
@@ -294,7 +273,7 @@ export function TokenList() {
                           href={token.telegram_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-500 hover:text-blue-700"
+                          className="text-gray-400 hover:text-white transition-colors text-xs"
                         >
                           📱
                         </a>

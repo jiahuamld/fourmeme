@@ -86,96 +86,111 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
-      <div className="flex flex-col md:flex-row gap-8">
-        {/* Token 基本信息 */}
-        <div className="w-full md:w-1/3">
-          <div className="relative aspect-square rounded-lg overflow-hidden mb-4">
-            <img
-              src={token.token_img_url}
-              alt={token.token_name}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="flex flex-wrap gap-2 mb-4">
-            {token.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-2 py-1 bg-blue-100 text-blue-600 rounded-full text-sm"
-              >
-                {tag}
+    <div className="relative min-h-screen">
+      {/* 背景图 */}
+      <div 
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: 'url(/Launcher/bg.svg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          opacity: 0.1
+        }}
+      />
+      
+      {/* 内容区域 */}
+      <div className="relative z-10 bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6 mx-auto max-w-7xl my-8">
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* Token 基本信息 */}
+          <div className="w-full md:w-1/3">
+            <div className="relative aspect-square rounded-lg overflow-hidden mb-4">
+              <img
+                src={token.token_img_url}
+                alt={token.token_name}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {token.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-2 py-1 bg-blue-100 text-blue-600 rounded-full text-sm"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <div className="flex items-center gap-4 mb-4">
+              <span className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full">
+                {token.chain}
               </span>
-            ))}
-          </div>
-          <div className="flex items-center gap-4 mb-4">
-            <span className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full">
-              {token.chain}
-            </span>
-          </div>
-        </div>
-
-        {/* Token 详细信息 */}
-        <div className="flex-1">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold mb-2">{token.token_name}</h1>
-            <p className="text-gray-500 text-xl mb-4">{token.ticker_symbol}</p>
-            <p className="text-gray-700 whitespace-pre-wrap">{token.token_description}</p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-6 mb-6">
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-gray-500 mb-1">市值</p>
-              <p className="text-2xl font-bold">${formatNumber(token.market_cap)}</p>
-            </div>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-gray-500 mb-1">24h交易量</p>
-              <p className="text-2xl font-bold">${formatNumber(token.volume_24h)}</p>
             </div>
           </div>
 
-          <div className="mb-6">
-            <h2 className="text-xl font-bold mb-4">合约地址</h2>
-            <div className="bg-gray-50 p-4 rounded-lg break-all">
-              <code>{token.address}</code>
+          {/* Token 详细信息 */}
+          <div className="flex-1">
+            <div className="mb-6">
+              <h1 className="text-3xl font-bold mb-2">{token.token_name}</h1>
+              <p className="text-gray-500 text-xl mb-4">{token.ticker_symbol}</p>
+              <p className="text-gray-700 whitespace-pre-wrap">{token.token_description}</p>
             </div>
-          </div>
 
-          <div>
-            <h2 className="text-xl font-bold mb-4">社交媒体</h2>
-            <div className="flex gap-4">
-              {token.website_url && (
-                <a
-                  href={token.website_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-blue-500 hover:text-blue-700"
-                >
-                  <span className="text-2xl">🌐</span>
-                  <span>官网</span>
-                </a>
-              )}
-              {token.twitter_url && (
-                <a
-                  href={token.twitter_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-blue-500 hover:text-blue-700"
-                >
-                  <span className="text-2xl">𝕏</span>
-                  <span>Twitter</span>
-                </a>
-              )}
-              {token.telegram_url && (
-                <a
-                  href={token.telegram_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-blue-500 hover:text-blue-700"
-                >
-                  <span className="text-2xl">📱</span>
-                  <span>Telegram</span>
-                </a>
-              )}
+            <div className="grid grid-cols-2 gap-6 mb-6">
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <p className="text-gray-500 mb-1">市值</p>
+                <p className="text-2xl font-bold">${formatNumber(token.market_cap)}</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <p className="text-gray-500 mb-1">24h交易量</p>
+                <p className="text-2xl font-bold">${formatNumber(token.volume_24h)}</p>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <h2 className="text-xl font-bold mb-4">合约地址</h2>
+              <div className="bg-gray-50 p-4 rounded-lg break-all">
+                <code>{token.address}</code>
+              </div>
+            </div>
+
+            <div>
+              <h2 className="text-xl font-bold mb-4">社交媒体</h2>
+              <div className="flex gap-4">
+                {token.website_url && (
+                  <a
+                    href={token.website_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-blue-500 hover:text-blue-700"
+                  >
+                    <span className="text-2xl">🌐</span>
+                    <span>官网</span>
+                  </a>
+                )}
+                {token.twitter_url && (
+                  <a
+                    href={token.twitter_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-blue-500 hover:text-blue-700"
+                  >
+                    <span className="text-2xl">𝕏</span>
+                    <span>Twitter</span>
+                  </a>
+                )}
+                {token.telegram_url && (
+                  <a
+                    href={token.telegram_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-blue-500 hover:text-blue-700"
+                  >
+                    <span className="text-2xl">📱</span>
+                    <span>Telegram</span>
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         </div>
