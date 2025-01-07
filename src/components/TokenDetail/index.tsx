@@ -30,6 +30,19 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
   const [token, setToken] = useState<TokenData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [copySuccess, setCopySuccess] = useState(false);
+
+  const handleCopyAddress = async () => {
+    if (token?.address) {
+      try {
+        await navigator.clipboard.writeText(token.address);
+        setCopySuccess(true);
+        setTimeout(() => setCopySuccess(false), 2000);
+      } catch (err) {
+        console.error('Failed to copy address:', err);
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchTokenDetail = async () => {
@@ -44,7 +57,7 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
           setError(data.message || '获取Token详情失败');
         }
       } catch (error) {
-        setError('获取Token详情时发生错误');
+        setError('Error occurred while fetching token details');
       } finally {
         setLoading(false);
       }
@@ -79,7 +92,7 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
     return (
       <div className="min-h-[400px] flex justify-center items-center">
         <div className="text-red-500">
-          <p>{error || '未找到Token信息'}</p>
+          <p>{error || 'Token not found'}</p>
         </div>
       </div>
     );
@@ -87,7 +100,7 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
 
   return (
     <div className="relative min-h-screen">
-      {/* 背景图 */}
+      {/* Background Image */}
       <div 
         className="absolute inset-0 z-0"
         style={{
@@ -95,14 +108,14 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
-          opacity: 0.1
+          opacity: 0.15
         }}
       />
       
-      {/* 内容区域 */}
-      <div className="relative z-10 bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6 mx-auto max-w-7xl my-8">
+      {/* Content Area */}
+      <div className="relative z-10 backdrop-blur-xl border border-white/10 rounded-lg shadow-2xl p-6 mx-auto max-w-7xl my-8">
         <div className="flex flex-col md:flex-row gap-8">
-          {/* Token 基本信息 */}
+          {/* Token Basic Info */}
           <div className="w-full md:w-1/3">
             <div className="relative aspect-square rounded-lg overflow-hidden mb-4">
               <img
@@ -115,57 +128,72 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
               {token.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2 py-1 bg-blue-100 text-blue-600 rounded-full text-sm"
+                  className="px-2 py-1 backdrop-blur-md bg-white/5 border border-white/10 text-blue-200 rounded-full text-sm"
                 >
                   {tag}
                 </span>
               ))}
             </div>
             <div className="flex items-center gap-4 mb-4">
-              <span className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full">
+              <span className="backdrop-blur-md bg-white/5 border border-white/10 text-purple-200 px-3 py-1 rounded-full">
                 {token.chain}
               </span>
             </div>
           </div>
 
-          {/* Token 详细信息 */}
+          {/* Token Details */}
           <div className="flex-1">
             <div className="mb-6">
-              <h1 className="text-3xl font-bold mb-2">{token.token_name}</h1>
-              <p className="text-gray-500 text-xl mb-4">{token.ticker_symbol}</p>
-              <p className="text-gray-700 whitespace-pre-wrap">{token.token_description}</p>
+              <h1 className="text-3xl font-bold mb-2 text-white">{token.token_name}</h1>
+              <p className="text-gray-400 text-xl mb-4">{token.ticker_symbol}</p>
+              <p className="text-gray-300 whitespace-pre-wrap">{token.token_description}</p>
             </div>
 
             <div className="grid grid-cols-2 gap-6 mb-6">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-gray-500 mb-1">市值</p>
-                <p className="text-2xl font-bold">${formatNumber(token.market_cap)}</p>
+              <div className="backdrop-blur-md bg-white/5 border border-white/10 p-4 rounded-lg">
+                <p className="text-gray-400 mb-1">Market Cap</p>
+                <p className="text-2xl font-bold text-white">${formatNumber(token.market_cap)}</p>
               </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-gray-500 mb-1">24h交易量</p>
-                <p className="text-2xl font-bold">${formatNumber(token.volume_24h)}</p>
+              <div className="backdrop-blur-md bg-white/5 border border-white/10 p-4 rounded-lg">
+                <p className="text-gray-400 mb-1">24h Volume</p>
+                <p className="text-2xl font-bold text-white">${formatNumber(token.volume_24h)}</p>
               </div>
             </div>
 
             <div className="mb-6">
-              <h2 className="text-xl font-bold mb-4">合约地址</h2>
-              <div className="bg-gray-50 p-4 rounded-lg break-all">
+              <h2 className="text-xl font-bold mb-4 text-white">Contract Address</h2>
+              <div className="backdrop-blur-md bg-white/5 border border-white/10 p-4 rounded-lg break-all text-gray-300 relative group">
                 <code>{token.address}</code>
+                <button
+                  onClick={handleCopyAddress}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-blue-300 hover:text-blue-200 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                >
+                  {copySuccess ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                      <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                    </svg>
+                  )}
+                </button>
               </div>
             </div>
 
             <div>
-              <h2 className="text-xl font-bold mb-4">社交媒体</h2>
+              <h2 className="text-xl font-bold mb-4 text-white">Social Media</h2>
               <div className="flex gap-4">
                 {token.website_url && (
                   <a
                     href={token.website_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-blue-500 hover:text-blue-700"
+                    className="flex items-center gap-2 text-blue-300 hover:text-blue-200"
                   >
                     <span className="text-2xl">🌐</span>
-                    <span>官网</span>
+                    <span>Website</span>
                   </a>
                 )}
                 {token.twitter_url && (
@@ -173,7 +201,7 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
                     href={token.twitter_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-blue-500 hover:text-blue-700"
+                    className="flex items-center gap-2 text-blue-300 hover:text-blue-200"
                   >
                     <span className="text-2xl">𝕏</span>
                     <span>Twitter</span>
@@ -184,7 +212,7 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
                     href={token.telegram_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-blue-500 hover:text-blue-700"
+                    className="flex items-center gap-2 text-blue-300 hover:text-blue-200"
                   >
                     <span className="text-2xl">📱</span>
                     <span>Telegram</span>
