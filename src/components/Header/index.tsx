@@ -15,7 +15,7 @@ export const Header = () => {
                 className="rounded-full"
               />
             </div>
-            <h1 className="ml-3 text-xl font-bold text-white">clanker</h1>
+            <h1 className="ml-3 text-xl font-bold text-white">Launcher</h1>
           </div>
           
           <button

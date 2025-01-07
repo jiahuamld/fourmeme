@@ -88,23 +88,91 @@ export function TokenList() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="container mx-auto px-4 py-8">
+        {/* Sort buttons */}
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => handleSort('market_cap')}
+            className={`px-4 py-2 rounded flex items-center gap-1 ${
+              sortField === 'market_cap' ? 'text-blue-500 font-bold' : 'text-gray-600'
+            }`}
+          >
+            <span>Market Cap</span>
+            {sortField === 'market_cap' && <span>{sortOrder === 'desc' ? '↓' : '↑'}</span>}
+          </button>
+          <button
+            onClick={() => handleSort('volume_24h')}
+            className={`px-4 py-2 rounded flex items-center gap-1 ${
+              sortField === 'volume_24h' ? 'text-blue-500 font-bold' : 'text-gray-600'
+            }`}
+          >
+            <span>Volume</span>
+            {sortField === 'volume_24h' && <span>{sortOrder === 'desc' ? '↓' : '↑'}</span>}
+          </button>
+          <button
+            onClick={() => handleSort('created_at')}
+            className={`px-4 py-2 rounded flex items-center gap-1 ${
+              sortField === 'created_at' ? 'text-blue-500 font-bold' : 'text-gray-600'
+            }`}
+          >
+            <span>Time</span>
+            {sortField === 'created_at' && <span>{sortOrder === 'desc' ? '↓' : '↑'}</span>}
+          </button>
+        </div>
+
+        {/* Loading state */}
+        <div className="min-h-[200px] flex justify-center items-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-red-500">
-          <p>Error: {error}</p>
-          <button 
-            onClick={fetchTokens}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      <div className="container mx-auto px-4 py-8">
+        {/* Sort buttons */}
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => handleSort('market_cap')}
+            className={`px-4 py-2 rounded flex items-center gap-1 ${
+              sortField === 'market_cap' ? 'text-blue-500 font-bold' : 'text-gray-600'
+            }`}
           >
-            Retry
+            <span>Market Cap</span>
+            {sortField === 'market_cap' && <span>{sortOrder === 'desc' ? '↓' : '↑'}</span>}
           </button>
+          <button
+            onClick={() => handleSort('volume_24h')}
+            className={`px-4 py-2 rounded flex items-center gap-1 ${
+              sortField === 'volume_24h' ? 'text-blue-500 font-bold' : 'text-gray-600'
+            }`}
+          >
+            <span>Volume</span>
+            {sortField === 'volume_24h' && <span>{sortOrder === 'desc' ? '↓' : '↑'}</span>}
+          </button>
+          <button
+            onClick={() => handleSort('created_at')}
+            className={`px-4 py-2 rounded flex items-center gap-1 ${
+              sortField === 'created_at' ? 'text-blue-500 font-bold' : 'text-gray-600'
+            }`}
+          >
+            <span>Time</span>
+            {sortField === 'created_at' && <span>{sortOrder === 'desc' ? '↓' : '↑'}</span>}
+          </button>
+        </div>
+
+        {/* Error state */}
+        <div className="min-h-[200px] flex justify-center items-center">
+          <div className="text-red-500">
+            <p>Error: {error}</p>
+            <button 
+              onClick={fetchTokens}
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Retry
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -118,27 +186,30 @@ export function TokenList() {
       <div className="flex gap-4 mb-6">
         <button
           onClick={() => handleSort('market_cap')}
-          className={`px-4 py-2 rounded ${
+          className={`px-4 py-2 rounded flex items-center gap-1 ${
             sortField === 'market_cap' ? 'text-blue-500 font-bold' : 'text-gray-600'
           }`}
         >
-          Sort by Market Cap {sortField === 'market_cap' && (sortOrder === 'desc' ? '↓' : '↑')}
+          <span>Market Cap</span>
+          {sortField === 'market_cap' && <span>{sortOrder === 'desc' ? '↓' : '↑'}</span>}
         </button>
         <button
           onClick={() => handleSort('volume_24h')}
-          className={`px-4 py-2 rounded ${
+          className={`px-4 py-2 rounded flex items-center gap-1 ${
             sortField === 'volume_24h' ? 'text-blue-500 font-bold' : 'text-gray-600'
           }`}
         >
-          Sort by Volume {sortField === 'volume_24h' && (sortOrder === 'desc' ? '↓' : '↑')}
+          <span>Volume</span>
+          {sortField === 'volume_24h' && <span>{sortOrder === 'desc' ? '↓' : '↑'}</span>}
         </button>
         <button
           onClick={() => handleSort('created_at')}
-          className={`px-4 py-2 rounded ${
+          className={`px-4 py-2 rounded flex items-center gap-1 ${
             sortField === 'created_at' ? 'text-blue-500 font-bold' : 'text-gray-600'
           }`}
         >
-          Sort by Time {sortField === 'created_at' && (sortOrder === 'desc' ? '↓' : '↑')}
+          <span>Time</span>
+          {sortField === 'created_at' && <span>{sortOrder === 'desc' ? '↓' : '↑'}</span>}
         </button>
       </div>
 
