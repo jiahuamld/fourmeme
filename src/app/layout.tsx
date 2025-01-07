@@ -7,7 +7,7 @@ import { DisableZoom } from "~/components/DisableZoom";
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "AIVENGERS",
+  title: "Launcher",
   description: "",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };

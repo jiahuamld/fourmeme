@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 interface Token {
   id: number;
@@ -221,85 +222,87 @@ export function TokenList() {
           </div>
         ) : (
           tokens.map((token) => (
-            <div key={token.id} className="bg-white rounded-lg shadow-lg overflow-hidden w-[240px]">
-              <div className="relative aspect-square">
-                <img
-                  src={decodeImageUrl(token.token_img_url)}
-                  alt={token.token_name}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white to-transparent h-12"></div>
-              </div>
-              <div className="p-2">
-                <div className="mb-2">
-                  <h2 className="text-base font-bold truncate">{token.token_name}</h2>
-                  <p className="text-gray-500 text-xs">{token.ticker_symbol}</p>
+            <div key={token.id} className="bg-white rounded-lg shadow-lg overflow-hidden w-[240px] hover:shadow-xl transition-shadow">
+              <Link href={`/token/${token.address}`} className="block">
+                <div className="relative aspect-square">
+                  <img
+                    src={decodeImageUrl(token.token_img_url)}
+                    alt={token.token_name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white to-transparent h-12"></div>
                 </div>
-                
-                <div className="mb-2">
-                  <p className="text-xs text-gray-600 line-clamp-2">{token.token_description}</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 mb-2">
-                  <div>
-                    <p className="text-xs text-gray-500">Market Cap</p>
-                    <p className="font-bold text-xs">${formatNumber(token.market_cap)}</p>
+                <div className="p-2">
+                  <div className="mb-2">
+                    <h2 className="text-base font-bold truncate">{token.token_name}</h2>
+                    <p className="text-gray-500 text-xs">{token.ticker_symbol}</p>
                   </div>
-                  <div>
-                    <p className="text-xs text-gray-500">24h Volume</p>
-                    <p className="font-bold text-xs">${formatNumber(token.volume_24h)}</p>
+                  
+                  <div className="mb-2">
+                    <p className="text-xs text-gray-600 line-clamp-2">{token.token_description}</p>
                   </div>
-                </div>
 
-                <div className="flex flex-wrap gap-1 mb-2">
-                  {token.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-1.5 py-0.5 bg-blue-100 text-blue-600 rounded-full text-[10px]"
-                    >
-                      {tag}
+                  <div className="grid grid-cols-2 gap-2 mb-2">
+                    <div>
+                      <p className="text-xs text-gray-500">Market Cap</p>
+                      <p className="font-bold text-xs">${formatNumber(token.market_cap)}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">24h Volume</p>
+                      <p className="font-bold text-xs">${formatNumber(token.volume_24h)}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1 mb-2">
+                    {token.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-1.5 py-0.5 bg-blue-100 text-blue-600 rounded-full text-[10px]"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="flex justify-between items-center text-[10px]">
+                    <span className="bg-purple-100 text-purple-600 px-1.5 py-0.5 rounded">
+                      {token.chain}
                     </span>
-                  ))}
-                </div>
-
-                <div className="flex justify-between items-center text-[10px]">
-                  <span className="bg-purple-100 text-purple-600 px-1.5 py-0.5 rounded">
-                    {token.chain}
-                  </span>
-                  <div className="flex gap-1.5">
-                    {token.website_url && (
-                      <a
-                        href={token.website_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:text-blue-700"
-                      >
-                        🌐
-                      </a>
-                    )}
-                    {token.twitter_url && (
-                      <a
-                        href={token.twitter_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:text-blue-700"
-                      >
-                        𝕏
-                      </a>
-                    )}
-                    {token.telegram_url && (
-                      <a
-                        href={token.telegram_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:text-blue-700"
-                      >
-                        📱
-                      </a>
-                    )}
+                    <div className="flex gap-1.5">
+                      {token.website_url && (
+                        <a
+                          href={token.website_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 hover:text-blue-700"
+                        >
+                          🌐
+                        </a>
+                      )}
+                      {token.twitter_url && (
+                        <a
+                          href={token.twitter_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 hover:text-blue-700"
+                        >
+                          𝕏
+                        </a>
+                      )}
+                      {token.telegram_url && (
+                        <a
+                          href={token.telegram_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 hover:text-blue-700"
+                        >
+                          📱
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             </div>
           ))
         )}
