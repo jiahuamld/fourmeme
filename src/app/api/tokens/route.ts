@@ -3,33 +3,33 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// 获取所有Token
+// Get all tokens
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const sort = searchParams.get('sort') || 'created_at'; // 默认按创建时间排序
-    const order = searchParams.get('order') || 'desc'; // 默认降序
+    const sort = searchParams.get('sort') || 'created_at'; // Default sort by creation time
+    const order = searchParams.get('order') || 'desc'; // Default order descending
 
-    // 验证排序字段
+    // Validate sort field
     const allowedSortFields = ['created_at', 'market_cap', 'volume_24h'];
     if (!allowedSortFields.includes(sort)) {
       return NextResponse.json(
         { 
           success: false, 
-          message: '无效的排序字段',
+          message: 'Invalid sort field',
           allowed_fields: allowedSortFields
         },
         { status: 400 }
       );
     }
 
-    // 验证排序方向
+    // Validate sort order
     const allowedOrders = ['asc', 'desc'];
     if (!allowedOrders.includes(order.toLowerCase())) {
       return NextResponse.json(
         { 
           success: false, 
-          message: '无效的排序方向',
+          message: 'Invalid sort order',
           allowed_orders: allowedOrders
         },
         { status: 400 }
@@ -51,12 +51,12 @@ export async function GET(request: Request) {
       }
     });
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : '未知错误';
-    console.error('获取Token失败:', errorMessage);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Failed to get tokens:', errorMessage);
     return NextResponse.json(
       { 
         success: false, 
-        message: '获取Token列表失败',
+        message: 'Failed to get token list',
         error: errorMessage
       },
       { status: 500 }
@@ -64,11 +64,11 @@ export async function GET(request: Request) {
   }
 }
 
-// 创建新Token
+// Create new token
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    console.log('收到的数据:', body);
+    console.log('Received data:', body);
     
     const { 
       token_img_url,
@@ -86,12 +86,12 @@ export async function POST(request: Request) {
       address
     } = body;
     
-    // 验证必填字段
+    // Validate required fields
     if (!token_img_url || !token_name || !address) {
       return NextResponse.json(
         { 
           success: false, 
-          message: '缺少必填字段',
+          message: 'Missing required fields',
           required: ['token_img_url', 'token_name', 'address']
         },
         { status: 400 }
@@ -119,15 +119,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ 
       success: true, 
       data: token,
-      message: 'Token创建成功'
+      message: 'Token created successfully'
     });
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : '未知错误';
-    console.error('创建Token失败:', errorMessage);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Failed to create token:', errorMessage);
     return NextResponse.json(
       { 
         success: false, 
-        message: '创建Token失败',
+        message: 'Failed to create token',
         error: errorMessage
       },
       { status: 500 }
@@ -135,22 +135,22 @@ export async function POST(request: Request) {
   }
 }
 
-// 清除所有Token
+// Delete all tokens
 export async function DELETE() {
   try {
     await prisma.token.deleteMany();
     
     return NextResponse.json({ 
       success: true, 
-      message: '所有Token已清除'
+      message: 'All tokens deleted successfully'
     });
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : '未知错误';
-    console.error('清除Token失败:', errorMessage);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Failed to delete tokens:', errorMessage);
     return NextResponse.json(
       { 
         success: false, 
-        message: '清除Token失败',
+        message: 'Failed to delete tokens',
         error: errorMessage
       },
       { status: 500 }

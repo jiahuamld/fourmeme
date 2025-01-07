@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// 通过地址获取Token
+// Get Token by address
 export async function GET(
   request: Request,
   { params }: { params: { address: string } }
@@ -21,7 +21,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          message: '未找到该Token'
+          message: 'Token not found'
         },
         { status: 404 }
       );
@@ -32,12 +32,12 @@ export async function GET(
       data: token
     });
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : '未知错误';
-    console.error('获取Token失败:', errorMessage);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Failed to get token:', errorMessage);
     return NextResponse.json(
       {
         success: false,
-        message: '获取Token失败',
+        message: 'Failed to get token',
         error: errorMessage
       },
       { status: 500 }
@@ -45,7 +45,7 @@ export async function GET(
   }
 }
 
-// 删除单个Token
+// Delete single token
 export async function DELETE(
   request: Request,
   { params }: { params: { address: string } }
@@ -53,7 +53,7 @@ export async function DELETE(
   try {
     const { address } = params;
 
-    // 先检查Token是否存在
+    // Check if token exists
     const existingToken = await prisma.token.findUnique({
       where: {
         address: address
@@ -64,13 +64,13 @@ export async function DELETE(
       return NextResponse.json(
         {
           success: false,
-          message: '未找到该Token'
+          message: 'Token not found'
         },
         { status: 404 }
       );
     }
 
-    // 删除Token
+    // Delete token
     await prisma.token.delete({
       where: {
         address: address
@@ -79,15 +79,15 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: 'Token删除成功'
+      message: 'Token deleted successfully'
     });
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : '未知错误';
-    console.error('删除Token失败:', errorMessage);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Failed to delete token:', errorMessage);
     return NextResponse.json(
       {
         success: false,
-        message: '删除Token失败',
+        message: 'Failed to delete token',
         error: errorMessage
       },
       { status: 500 }
