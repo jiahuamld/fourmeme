@@ -8,14 +8,14 @@ interface TokenDetailProps {
 }
 
 interface TokenData {
-  id: number;
+  id: string;
   token_img_url: string;
   token_name: string;
   ticker_symbol: string;
   token_description: string;
   raised_token: string;
-  market_cap: string;
-  volume_24h: string;
+  market_cap: number;
+  volume_24h: number;
   website_url: string;
   twitter_url: string;
   telegram_url: string;
@@ -48,7 +48,7 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
     const fetchTokenDetail = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/token?address=${address}`);
+        const response = await fetch(`/api/tokens/${address}`);
         const data = await response.json();
         
         if (data.success) {
@@ -57,7 +57,7 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
           setError(data.message || '获取Token详情失败');
         }
       } catch (error) {
-        setError('Error occurred while fetching token details');
+        setError('获取Token详情时发生错误');
       } finally {
         setLoading(false);
       }
@@ -66,18 +66,17 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
     fetchTokenDetail();
   }, [address]);
 
-  const formatNumber = (num: string) => {
-    const value = parseFloat(num);
-    if (value >= 1e9) {
-      return `${(value / 1e9).toFixed(2)}B`;
+  const formatNumber = (num: number) => {
+    if (num >= 1e9) {
+      return `${(num / 1e9).toFixed(2)}B`;
     }
-    if (value >= 1e6) {
-      return `${(value / 1e6).toFixed(2)}M`;
+    if (num >= 1e6) {
+      return `${(num / 1e6).toFixed(2)}M`;
     }
-    if (value >= 1e3) {
-      return `${(value / 1e3).toFixed(2)}K`;
+    if (num >= 1e3) {
+      return `${(num / 1e3).toFixed(2)}K`;
     }
-    return value.toFixed(2);
+    return num.toFixed(2);
   };
 
   if (loading) {

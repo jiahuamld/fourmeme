@@ -1,64 +1,9 @@
 import { NextResponse } from 'next/server';
-import pool, { queryWithRetry } from '@/lib/db';
+import { PrismaClient } from '@prisma/client';
 
-interface Token {
-  id: number;
-  token_img_url: string;
-  token_name: string;
-  ticker_symbol: string;
-  token_description: string;
-  raised_token: string;
-  market_cap: string;
-  volume_24h: string;
-  website_url: string;
-  twitter_url: string;
-  telegram_url: string;
-  tags: string[];
-  chain: string;
-  address: string;
-  created_at: string;
-  updated_at: string;
-}
+const prisma = new PrismaClient();
 
-// 删除旧表并创建新表的SQL
-const dropTableSQL = `DROP TABLE IF EXISTS tokens;`;
-
-const createTableSQL = `
-  CREATE TABLE tokens (
-    id SERIAL PRIMARY KEY,
-    token_img_url VARCHAR(255) NOT NULL,
-    token_name VARCHAR(255) NOT NULL,
-    ticker_symbol VARCHAR(50),
-    token_description TEXT,
-    raised_token VARCHAR(255),
-    market_cap NUMERIC(30, 2),
-    volume_24h NUMERIC(30, 2),
-    website_url VARCHAR(255),
-    twitter_url VARCHAR(255),
-    telegram_url VARCHAR(255),
-    tags TEXT[],
-    chain VARCHAR(50),
-    address VARCHAR(255) NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
-  );
-`;
-
-// 初始化表
-async function initializeTable() {
-  try {
-    await queryWithRetry(dropTableSQL);
-    await queryWithRetry(createTableSQL);
-    console.log('表结构更新成功');
-  } catch (err) {
-    console.error('创建表失败:', err);
-  }
-}
-
-// 初始化表
-// initializeTable();
-
-// 获取所有Coin
+// 获取所有Token
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -91,14 +36,15 @@ export async function GET(request: Request) {
       );
     }
 
-    const result = await queryWithRetry<Token>(`
-      SELECT * FROM tokens 
-      ORDER BY ${sort} ${order}
-    `);
+    const tokens = await prisma.token.findMany({
+      orderBy: {
+        [sort]: order.toLowerCase()
+      }
+    });
     
     return NextResponse.json({ 
       success: true, 
-      data: result.rows,
+      data: tokens,
       sort_info: {
         field: sort,
         order: order
@@ -106,11 +52,11 @@ export async function GET(request: Request) {
     });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : '未知错误';
-    console.error('获取Coin失败:', errorMessage);
+    console.error('获取Token失败:', errorMessage);
     return NextResponse.json(
       { 
         success: false, 
-        message: '获取Coin列表失败',
+        message: '获取Token列表失败',
         error: errorMessage
       },
       { status: 500 }
@@ -118,7 +64,7 @@ export async function GET(request: Request) {
   }
 }
 
-// 创建新Coin
+// 创建新Token
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -152,53 +98,59 @@ export async function POST(request: Request) {
       );
     }
     
-    const result = await queryWithRetry<Token>(
-      `INSERT INTO tokens (
+    const token = await prisma.token.create({
+      data: {
         token_img_url,
         token_name,
         ticker_symbol,
         token_description,
         raised_token,
-        market_cap,
-        volume_24h,
+        market_cap: parseFloat(market_cap) || null,
+        volume_24h: parseFloat(volume_24h) || null,
         website_url,
         twitter_url,
         telegram_url,
-        tags,
+        tags: tags || [],
         chain,
         address
-      ) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) 
-      RETURNING *`,
-      [
-        token_img_url,
-        token_name,
-        ticker_symbol,
-        token_description,
-        raised_token,
-        market_cap,
-        volume_24h,
-        website_url,
-        twitter_url,
-        telegram_url,
-        tags,
-        chain,
-        address
-      ]
-    );
+      }
+    });
     
     return NextResponse.json({ 
       success: true, 
-      data: result.rows[0],
-      message: 'Coin创建成功'
+      data: token,
+      message: 'Token创建成功'
     });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : '未知错误';
-    console.error('创建Coin失败:', errorMessage);
+    console.error('创建Token失败:', errorMessage);
     return NextResponse.json(
       { 
         success: false, 
-        message: '创建Coin失败',
+        message: '创建Token失败',
+        error: errorMessage
+      },
+      { status: 500 }
+    );
+  }
+}
+
+// 清除所有Token
+export async function DELETE() {
+  try {
+    await prisma.token.deleteMany();
+    
+    return NextResponse.json({ 
+      success: true, 
+      message: '所有Token已清除'
+    });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : '未知错误';
+    console.error('清除Token失败:', errorMessage);
+    return NextResponse.json(
+      { 
+        success: false, 
+        message: '清除Token失败',
         error: errorMessage
       },
       { status: 500 }
