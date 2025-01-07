@@ -175,7 +175,19 @@ const config: Config = {
   				to: {
   					transform: 'translateY(calc(-100% - var(--gap)))'
   				}
-  			}
+  			},
+  			'border-pulse': {
+  				'0%, 100%': { opacity: '1', transform: 'scale(1)' },
+  				'50%': { opacity: '0.5', transform: 'scale(1.05)' },
+  			},
+  			'arrow-move': {
+  				'0%, 100%': { transform: 'translateX(0)', opacity: '0.3' },
+  				'50%': { transform: 'translateX(10px)', opacity: '1' },
+  			},
+  			'arrow-move-reverse': {
+  				'0%, 100%': { transform: 'translateX(0)', opacity: '0.3' },
+  				'50%': { transform: 'translateX(-10px)', opacity: '1' },
+  			},
   		},
   		animation: {
   			marquee: 'marquee var(--duration) infinite linear',
@@ -189,7 +201,10 @@ const config: Config = {
   			'breath-border': 'breath-border 3s ease-in-out infinite',
   			'float-slow': 'float 3s ease-in-out infinite',
   			'pulse-slow': 'pulse 4s ease-in-out infinite',
-  			'marquee-vertical': 'marquee-vertical var(--duration) linear infinite'
+  			'marquee-vertical': 'marquee-vertical var(--duration) linear infinite',
+  			'border-pulse': 'border-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+  			'arrow-right': 'arrow-move 2s ease-in-out infinite',
+  			'arrow-left': 'arrow-move-reverse 2s ease-in-out infinite',
   		},
   		backgroundImage: {
   			'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

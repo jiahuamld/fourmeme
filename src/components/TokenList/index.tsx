@@ -44,11 +44,11 @@ export function TokenList() {
       if (data.success) {
         setTokens(data.data);
       } else {
-        setError(data.message || '获取数据失败');
+        setError(data.message || 'Failed to fetch data');
       }
     } catch (error) {
-      console.error('获取Token列表失败:', error);
-      setError('获取数据时发生错误');
+      console.error('Failed to fetch token list:', error);
+      setError('An error occurred while fetching data');
     } finally {
       setLoading(false);
     }
@@ -72,7 +72,7 @@ export function TokenList() {
     try {
       return decodeURI(url);
     } catch (error) {
-      console.error('URL解码失败:', error);
+      console.error('URL decoding failed:', error);
       return url;
     }
   };
@@ -98,12 +98,12 @@ export function TokenList() {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="text-red-500">
-          <p>错误: {error}</p>
+          <p>Error: {error}</p>
           <button 
             onClick={fetchTokens}
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
-            重试
+            Retry
           </button>
         </div>
       </div>
@@ -112,89 +112,90 @@ export function TokenList() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Token 列表</h1>
+
       
-      {/* 排序按钮 */}
+      {/* Sort buttons */}
       <div className="flex gap-4 mb-6">
         <button
           onClick={() => handleSort('market_cap')}
           className={`px-4 py-2 rounded ${
-            sortField === 'market_cap' ? 'bg-blue-500 text-white' : 'bg-gray-200'
+            sortField === 'market_cap' ? 'text-blue-500 font-bold' : 'text-gray-600'
           }`}
         >
-          按市值排序 {sortField === 'market_cap' && (sortOrder === 'desc' ? '↓' : '↑')}
+          Sort by Market Cap {sortField === 'market_cap' && (sortOrder === 'desc' ? '↓' : '↑')}
         </button>
         <button
           onClick={() => handleSort('volume_24h')}
           className={`px-4 py-2 rounded ${
-            sortField === 'volume_24h' ? 'bg-blue-500 text-white' : 'bg-gray-200'
+            sortField === 'volume_24h' ? 'text-blue-500 font-bold' : 'text-gray-600'
           }`}
         >
-          按交易量排序 {sortField === 'volume_24h' && (sortOrder === 'desc' ? '↓' : '↑')}
+          Sort by Volume {sortField === 'volume_24h' && (sortOrder === 'desc' ? '↓' : '↑')}
         </button>
         <button
           onClick={() => handleSort('created_at')}
           className={`px-4 py-2 rounded ${
-            sortField === 'created_at' ? 'bg-blue-500 text-white' : 'bg-gray-200'
+            sortField === 'created_at' ? 'text-blue-500 font-bold' : 'text-gray-600'
           }`}
         >
-          按时间排序 {sortField === 'created_at' && (sortOrder === 'desc' ? '↓' : '↑')}
+          Sort by Time {sortField === 'created_at' && (sortOrder === 'desc' ? '↓' : '↑')}
         </button>
       </div>
 
-      {/* Token列表 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Token list */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {tokens.length === 0 ? (
-          <div className="col-span-3 text-center text-gray-500">
-            暂无数据
+          <div className="col-span-4 text-center text-gray-500">
+            No data available
           </div>
         ) : (
           tokens.map((token) => (
-            <div key={token.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <div className="p-4">
-                <div className="flex items-center mb-4">
-                  <img
-                    src={decodeImageUrl(token.token_img_url)}
-                    alt={token.token_name}
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
-                  <div>
-                    <h2 className="text-xl font-bold">{token.token_name}</h2>
-                    <p className="text-gray-500">{token.ticker_symbol}</p>
-                  </div>
+            <div key={token.id} className="bg-white rounded-lg shadow-lg overflow-hidden w-[240px]">
+              <div className="relative aspect-square">
+                <img
+                  src={decodeImageUrl(token.token_img_url)}
+                  alt={token.token_name}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white to-transparent h-12"></div>
+              </div>
+              <div className="p-2">
+                <div className="mb-2">
+                  <h2 className="text-base font-bold truncate">{token.token_name}</h2>
+                  <p className="text-gray-500 text-xs">{token.ticker_symbol}</p>
                 </div>
                 
-                <div className="mb-4">
-                  <p className="text-sm text-gray-600">{token.token_description}</p>
+                <div className="mb-2">
+                  <p className="text-xs text-gray-600 line-clamp-2">{token.token_description}</p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="grid grid-cols-2 gap-2 mb-2">
                   <div>
-                    <p className="text-sm text-gray-500">市值</p>
-                    <p className="font-bold">${formatNumber(token.market_cap)}</p>
+                    <p className="text-xs text-gray-500">Market Cap</p>
+                    <p className="font-bold text-xs">${formatNumber(token.market_cap)}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">24h交易量</p>
-                    <p className="font-bold">${formatNumber(token.volume_24h)}</p>
+                    <p className="text-xs text-gray-500">24h Volume</p>
+                    <p className="font-bold text-xs">${formatNumber(token.volume_24h)}</p>
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="flex flex-wrap gap-1 mb-2">
                   {token.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-2 py-1 bg-blue-100 text-blue-600 rounded-full text-sm"
+                      className="px-1.5 py-0.5 bg-blue-100 text-blue-600 rounded-full text-[10px]"
                     >
                       {tag}
                     </span>
                   ))}
                 </div>
 
-                <div className="flex justify-between items-center text-sm">
-                  <span className="bg-purple-100 text-purple-600 px-2 py-1 rounded">
+                <div className="flex justify-between items-center text-[10px]">
+                  <span className="bg-purple-100 text-purple-600 px-1.5 py-0.5 rounded">
                     {token.chain}
                   </span>
-                  <div className="flex gap-2">
+                  <div className="flex gap-1.5">
                     {token.website_url && (
                       <a
                         href={token.website_url}

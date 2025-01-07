@@ -56,7 +56,7 @@ async function initializeTable() {
 }
 
 // 初始化表
-initializeTable();
+// initializeTable();
 
 // 获取所有Coin
 export async function GET(request: Request) {
