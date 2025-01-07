@@ -35,7 +35,7 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
     const fetchTokenDetail = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/tokens/${address}`);
+        const response = await fetch(`/api/token?address=${address}`);
         const data = await response.json();
         
         if (data.success) {
