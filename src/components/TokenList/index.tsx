@@ -220,43 +220,45 @@ export function TokenList() {
           </div>
         ) : (
           tokens.map((token) => (
-            <Link key={token.id} href={`/token/${token.contractAddress}`} className="block bg-black rounded-lg shadow-lg overflow-hidden w-[180px] hover:shadow-xl transition-shadow">
-              <div className="relative aspect-square bg-black">
-                <img
-                  src={decodeImageUrl(token.imageUrl)}
-                  alt={token.name}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-6"></div>
-              </div>
-              <div className="p-1 bg-black">
-                <div className="mb-1">
-                  <p className="text-[8px] text-emerald-400 font-medium truncate mb-0.5">Created by: {token.deployer.slice(0, 8)}...{token.deployer.slice(-6)}</p>
-                  <h2 className="text-sm font-bold truncate text-white tracking-wide">
-                    {token.name} <span className="text-[10px]">({token.symbol})</span>
-                  </h2>
+            <div key={token.id} className="relative w-[180px]">
+              <Link href={`/token/${token.contractAddress}`} className="block bg-black rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <div className="relative aspect-square bg-black">
+                  <img
+                    src={decodeImageUrl(token.imageUrl)}
+                    alt={token.name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-6"></div>
                 </div>
-                
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="text-[9px] text-gray-400 uppercase tracking-wider font-medium">Market Cap</p>
-                    <p className="font-bold text-xs text-gray-400">${formatNumber(token.market_cap?.toString() || '0')}</p>
+                <div className="p-1 bg-black">
+                  <div className="mb-1">
+                    <p className="text-[8px] text-emerald-400 font-medium truncate mb-0.5">Created by: {token.deployer.slice(0, 8)}...{token.deployer.slice(-6)}</p>
+                    <h2 className="text-sm font-bold truncate text-white tracking-wide">
+                      {token.name} <span className="text-[10px]">({token.symbol})</span>
+                    </h2>
                   </div>
-                  <div className="flex gap-1.5">
-                    {token.twitter_url && (
-                      <a
-                        href={token.twitter_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-white transition-colors text-xs"
-                      >
-                        𝕏
-                      </a>
-                    )}
+                  
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-[9px] text-gray-400 uppercase tracking-wider font-medium">Market Cap</p>
+                      <p className="font-bold text-xs text-gray-400">${formatNumber(token.market_cap?.toString() || '0')}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+              {token.twitter_url && (
+                <a
+                  href={token.twitter_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute top-2 right-2 bg-black/50 p-1 rounded-full hover:bg-black/70 transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                </a>
+              )}
+            </div>
           ))
         )}
       </div>
