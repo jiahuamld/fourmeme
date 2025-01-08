@@ -22,7 +22,7 @@ const nextConfig = {
   //   ];
   // },
   images: {
-    domains: ['public.agiverse.io', 'backend.agiverse.io', 'files.slack.com'],
+    domains: ['public.agiverse.io', 'backend.agiverse.io', 'files.slack.com', 'pbs.twimg.com'],
   },
 };
 

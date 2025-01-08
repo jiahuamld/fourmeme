@@ -1,6 +1,20 @@
+'use client';
+
 import Image from 'next/image';
+import { useState } from 'react';
+import WalletConnectModal from '../WalletConnectModal';
 
 export const Header = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <header className="w-full bg-black shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,13 +33,19 @@ export const Header = () => {
           </div>
           
           <button
-            className="inline-flex items-center px-6 py-2 text-sm font-medium rounded-lg text-black hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#21d4e0] transition-opacity"
+            onClick={showModal}
+            className="inline-flex items-center px-6 py-2 text-sm font-medium rounded-lg text-black transition-opacity hover:opacity-90"
             style={{
               background: 'linear-gradient(90deg, #76f951, #21d4e0)'
             }}
           >
             Connect Wallet
           </button>
+
+          <WalletConnectModal 
+            open={isModalVisible}
+            onClose={handleModalClose}
+          />
         </div>
       </div>
     </header>

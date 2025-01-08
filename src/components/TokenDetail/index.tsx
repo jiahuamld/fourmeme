@@ -81,24 +81,48 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
 
   if (loading) {
     return (
-      <div className="min-h-[400px] flex justify-center items-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="relative min-h-screen flex flex-col w-full">
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: 'url(/Launcher/bg.svg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            opacity: 0.15
+          }}
+        />
+        <div className="relative z-10 backdrop-blur-xl border border-white/10 rounded-lg shadow-2xl p-6 w-full max-w-7xl mx-auto my-8 flex-1 flex justify-center items-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
       </div>
     );
   }
 
   if (error || !token) {
     return (
-      <div className="min-h-[400px] flex justify-center items-center">
-        <div className="text-red-500">
-          <p>{error || 'Token not found'}</p>
+      <div className="relative min-h-screen flex flex-col w-full">
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: 'url(/Launcher/bg.svg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            opacity: 0.15
+          }}
+        />
+        <div className="relative z-10 backdrop-blur-xl border border-white/10 rounded-lg shadow-2xl p-6 w-full max-w-7xl mx-auto my-8 flex-1 flex justify-center items-center">
+          <div className="text-red-500">
+            <p>{error || 'Token not found'}</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen flex flex-col w-full">
       {/* Background Image */}
       <div 
         className="absolute inset-0 z-0"
@@ -112,7 +136,7 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
       />
       
       {/* Content Area */}
-      <div className="relative z-10 backdrop-blur-xl border border-white/10 rounded-lg shadow-2xl p-6 mx-auto max-w-7xl my-8">
+      <div className="relative z-10 backdrop-blur-xl border border-white/10 rounded-lg shadow-2xl p-6 w-full max-w-7xl mx-auto my-8 flex-1">
         <div className="flex flex-col md:flex-row gap-8">
           {/* Token Basic Info */}
           <div className="w-full md:w-1/3">
