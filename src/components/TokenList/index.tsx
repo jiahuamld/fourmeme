@@ -4,20 +4,20 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 interface Token {
-  id: number;
-  token_img_url: string;
-  token_name: string;
-  ticker_symbol: string;
-  token_description: string;
-  raised_token: string;
-  market_cap: string;
-  volume_24h: string;
-  website_url: string;
-  twitter_url: string;
-  telegram_url: string;
-  tags: string[];
+  id: string;
+  name: string;
+  symbol: string;
+  deployer: string;
+  userId: string;
+  imageUrl: string;
+  messageId: string;
+  platform: string;
+  contractAddress: string;
   chain: string;
-  address: string;
+  pair: string | null;
+  market_cap: number | null;
+  volume_24h: number | null;
+  twitter_url: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -221,43 +221,33 @@ export function TokenList() {
         ) : (
           tokens.map((token) => (
             <div key={token.id} className="bg-black rounded-lg shadow-lg overflow-hidden w-[180px] hover:shadow-xl transition-shadow">
-              <Link href={`/token/${token.address}`} className="block">
+              <Link href={`/token/${token.contractAddress}`} className="block">
                 <div className="relative aspect-square bg-black">
                   <img
-                    src={decodeImageUrl(token.token_img_url)}
-                    alt={token.token_name}
+                    src={decodeImageUrl(token.imageUrl)}
+                    alt={token.name}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-6"></div>
                 </div>
                 <div className="p-1 bg-black">
                   <div className="mb-1">
-                    <p className="text-[8px] text-emerald-400 font-medium truncate mb-0.5">Created by: {token.address.slice(0, 8)}...{token.address.slice(-6)}</p>
+                    <p className="text-[8px] text-emerald-400 font-medium truncate mb-0.5">Created by: {token.deployer.slice(0, 8)}...{token.deployer.slice(-6)}</p>
                     <h2 className="text-sm font-bold truncate text-white tracking-wide">
-                      {token.token_name} <span className="text-[10px]">({token.ticker_symbol})</span>
+                      {token.name} <span className="text-[10px]">({token.symbol})</span>
                     </h2>
                   </div>
                   
                   <div className="mb-1.5">
-                    <p className="text-[9px] text-gray-300/80 line-clamp-2 leading-relaxed">{token.token_description}</p>
+                    <p className="text-[9px] text-gray-300/80 line-clamp-2 leading-relaxed">{token.messageId}</p>
                   </div>
 
                   <div className="flex justify-between items-center">
                     <div>
                       <p className="text-[9px] text-gray-400 uppercase tracking-wider font-medium">Market Cap</p>
-                      <p className="font-bold text-xs text-gray-400">${formatNumber(token.market_cap)}</p>
+                      <p className="font-bold text-xs text-gray-400">${formatNumber(token.market_cap?.toString() || '0')}</p>
                     </div>
                     <div className="flex gap-1.5">
-                      {token.website_url && (
-                        <a
-                          href={token.website_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-gray-400 hover:text-white transition-colors text-xs"
-                        >
-                          🌐
-                        </a>
-                      )}
                       {token.twitter_url && (
                         <a
                           href={token.twitter_url}
@@ -266,16 +256,6 @@ export function TokenList() {
                           className="text-gray-400 hover:text-white transition-colors text-xs"
                         >
                           𝕏
-                        </a>
-                      )}
-                      {token.telegram_url && (
-                        <a
-                          href={token.telegram_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-gray-400 hover:text-white transition-colors text-xs"
-                        >
-                          📱
                         </a>
                       )}
                     </div>

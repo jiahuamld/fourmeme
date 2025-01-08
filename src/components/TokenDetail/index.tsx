@@ -9,19 +9,19 @@ interface TokenDetailProps {
 
 interface TokenData {
   id: string;
-  token_img_url: string;
-  token_name: string;
-  ticker_symbol: string;
-  token_description: string;
-  raised_token: string;
-  market_cap: number;
-  volume_24h: number;
-  website_url: string;
-  twitter_url: string;
-  telegram_url: string;
-  tags: string[];
+  name: string;
+  symbol: string;
+  deployer: string;
+  userId: string;
+  imageUrl: string;
+  messageId: string;
+  platform: string;
+  contractAddress: string;
   chain: string;
-  address: string;
+  pair: string | null;
+  market_cap: number | null;
+  volume_24h: number | null;
+  twitter_url: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -33,9 +33,9 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
   const [copySuccess, setCopySuccess] = useState(false);
 
   const handleCopyAddress = async () => {
-    if (token?.address) {
+    if (token?.contractAddress) {
       try {
-        await navigator.clipboard.writeText(token.address);
+        await navigator.clipboard.writeText(token.contractAddress);
         setCopySuccess(true);
         setTimeout(() => setCopySuccess(false), 2000);
       } catch (err) {
@@ -142,20 +142,10 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
           <div className="w-full md:w-1/3">
             <div className="relative aspect-square rounded-lg overflow-hidden mb-4">
               <img
-                src={token.token_img_url}
-                alt={token.token_name}
+                src={token.imageUrl}
+                alt={token.name}
                 className="w-full h-full object-cover"
               />
-            </div>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {token.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-2 py-1 backdrop-blur-md bg-white/5 border border-white/10 text-blue-200 rounded-full text-sm"
-                >
-                  {tag}
-                </span>
-              ))}
             </div>
             <div className="flex items-center gap-4 mb-4">
               <span className="backdrop-blur-md bg-white/5 border border-white/10 text-purple-200 px-3 py-1 rounded-full">
@@ -167,26 +157,26 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
           {/* Token Details */}
           <div className="flex-1">
             <div className="mb-6">
-              <h1 className="text-3xl font-bold mb-2 text-white">{token.token_name}</h1>
-              <p className="text-gray-400 text-xl mb-4">{token.ticker_symbol}</p>
-              <p className="text-gray-300 whitespace-pre-wrap">{token.token_description}</p>
+              <h1 className="text-3xl font-bold mb-2 text-white">{token.name}</h1>
+              <p className="text-gray-400 text-xl mb-4">{token.symbol}</p>
+              <p className="text-gray-300 whitespace-pre-wrap">{token.messageId}</p>
             </div>
 
             <div className="grid grid-cols-2 gap-6 mb-6">
               <div className="backdrop-blur-md bg-white/5 border border-white/10 p-4 rounded-lg">
                 <p className="text-gray-400 mb-1">Market Cap</p>
-                <p className="text-2xl font-bold text-white">${formatNumber(token.market_cap)}</p>
+                <p className="text-2xl font-bold text-white">${formatNumber(token.market_cap || 0)}</p>
               </div>
               <div className="backdrop-blur-md bg-white/5 border border-white/10 p-4 rounded-lg">
                 <p className="text-gray-400 mb-1">24h Volume</p>
-                <p className="text-2xl font-bold text-white">${formatNumber(token.volume_24h)}</p>
+                <p className="text-2xl font-bold text-white">${formatNumber(token.volume_24h || 0)}</p>
               </div>
             </div>
 
             <div className="mb-6">
               <h2 className="text-xl font-bold mb-4 text-white">Contract Address</h2>
               <div className="backdrop-blur-md bg-white/5 border border-white/10 p-4 rounded-lg break-all text-gray-300 relative group">
-                <code>{token.address}</code>
+                <code>{token.contractAddress}</code>
                 <button
                   onClick={handleCopyAddress}
                   className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-blue-300 hover:text-blue-200 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
@@ -208,17 +198,6 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
             <div>
               <h2 className="text-xl font-bold mb-4 text-white">Social Media</h2>
               <div className="flex gap-4">
-                {token.website_url && (
-                  <a
-                    href={token.website_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-blue-300 hover:text-blue-200"
-                  >
-                    <span className="text-2xl">🌐</span>
-                    <span>Website</span>
-                  </a>
-                )}
                 {token.twitter_url && (
                   <a
                     href={token.twitter_url}
@@ -227,18 +206,7 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
                     className="flex items-center gap-2 text-blue-300 hover:text-blue-200"
                   >
                     <span className="text-2xl">𝕏</span>
-                    <span>Twitter</span>
-                  </a>
-                )}
-                {token.telegram_url && (
-                  <a
-                    href={token.telegram_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-blue-300 hover:text-blue-200"
-                  >
-                    <span className="text-2xl">📱</span>
-                    <span>Telegram</span>
+          
                   </a>
                 )}
               </div>

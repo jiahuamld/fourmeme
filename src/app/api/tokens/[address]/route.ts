@@ -11,9 +11,9 @@ export async function GET(
   try {
     const { address } = params;
 
-    const token = await prisma.token.findUnique({
+    const token = await prisma.Token.findUnique({
       where: {
-        address: address
+        contractAddress: address
       }
     });
 
@@ -54,9 +54,9 @@ export async function DELETE(
     const { address } = params;
 
     // Check if token exists
-    const existingToken = await prisma.token.findUnique({
+    const existingToken = await prisma.Token.findUnique({
       where: {
-        address: address
+        contractAddress: address
       }
     });
 
@@ -71,9 +71,9 @@ export async function DELETE(
     }
 
     // Delete token
-    await prisma.token.delete({
+    await prisma.Token.delete({
       where: {
-        address: address
+        contractAddress: address
       }
     });
 

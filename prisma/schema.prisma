@@ -12,19 +12,23 @@ datasource db {
 
 model Token {
   id                String   @id @default(cuid())
-  token_img_url     String
-  token_name        String
-  ticker_symbol     String?
-  token_description String?  @db.Text
-  raised_token      String?
+  name             String
+  symbol           String
+  deployer         String
+  userId           String
+  imageUrl         String
+  messageId        String
+  platform         String
+  contractAddress  String   @unique
+  chain            String
+  pair             String?
+
   market_cap        Float?
   volume_24h        Float?
-  website_url       String?
   twitter_url       String?
-  telegram_url      String?
-  tags              String[] @default([])
-  chain             String?
-  address           String   @unique
+
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
 } 
+
+

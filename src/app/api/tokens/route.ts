@@ -71,28 +71,28 @@ export async function POST(request: Request) {
     console.log('Received data:', body);
     
     const { 
-      token_img_url,
-      token_name,
-      ticker_symbol,
-      token_description,
-      raised_token,
+      name,
+      symbol,
+      deployer,
+      userId,
+      imageUrl,
+      messageId,
+      platform,
+      contractAddress,
+      chain,
+      pair,
       market_cap,
       volume_24h,
-      website_url,
-      twitter_url,
-      telegram_url,
-      tags,
-      chain,
-      address
+      twitter_url
     } = body;
     
     // Validate required fields
-    if (!token_img_url || !token_name || !address) {
+    if (!name || !symbol || !contractAddress) {
       return NextResponse.json(
         { 
           success: false, 
           message: 'Missing required fields',
-          required: ['token_img_url', 'token_name', 'address']
+          required: ['name', 'symbol', 'contractAddress']
         },
         { status: 400 }
       );
@@ -100,19 +100,19 @@ export async function POST(request: Request) {
     
     const token = await prisma.token.create({
       data: {
-        token_img_url,
-        token_name,
-        ticker_symbol,
-        token_description,
-        raised_token,
-        market_cap: parseFloat(market_cap) || null,
-        volume_24h: parseFloat(volume_24h) || null,
-        website_url,
-        twitter_url,
-        telegram_url,
-        tags: tags || [],
+        name,
+        symbol,
+        deployer,
+        userId,
+        imageUrl,
+        messageId,
+        platform,
+        contractAddress,
         chain,
-        address
+        pair,
+        market_cap: market_cap ? parseFloat(market_cap) : null,
+        volume_24h: volume_24h ? parseFloat(volume_24h) : null,
+        twitter_url
       }
     });
     
