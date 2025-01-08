@@ -12,6 +12,7 @@ datasource db {
 
 model Token {
   id                String   @id @default(cuid())
+
   name             String
   symbol           String
   deployer         String
@@ -26,7 +27,6 @@ model Token {
   market_cap        Float?
   volume_24h        Float?
   twitter_url       String?
-
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
 } 
