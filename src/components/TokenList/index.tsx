@@ -220,28 +220,28 @@ export function TokenList() {
           </div>
         ) : (
           tokens.map((token) => (
-            <div key={token.id} className="relative w-[180px]">
-              <Link href={`/token/${token.contractAddress}`} className="block bg-black rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                <div className="relative aspect-square bg-black">
+            <div key={token.id} className="relative w-[180px] group">
+              <Link href={`/token/${token.contractAddress}`} className="block bg-gray-800/40 backdrop-blur-md rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 border border-gray-700/50 hover:border-gray-500">
+                <div className="relative aspect-square bg-gray-900/50">
                   <img
                     src={decodeImageUrl(token.imageUrl)}
                     alt={token.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-6"></div>
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900/90 via-gray-900/50 to-transparent h-12"></div>
                 </div>
-                <div className="p-1 bg-black">
-                  <div className="mb-1">
-                    <p className="text-[8px] text-emerald-400 font-medium truncate mb-0.5">Created by: {token.deployer.slice(0, 8)}...{token.deployer.slice(-6)}</p>
-                    <h2 className="text-sm font-bold truncate text-white tracking-wide">
-                      {token.name} <span className="text-[10px]">({token.symbol})</span>
+                <div className="p-2 bg-gray-800/60 backdrop-blur-md border-t border-gray-700/50">
+                  <div className="mb-1.5">
+                    <p className="text-[8px] text-emerald-300 font-medium truncate mb-0.5">Created by: {token.deployer.slice(0, 8)}...{token.deployer.slice(-6)}</p>
+                    <h2 className="text-sm font-bold truncate text-gray-100 tracking-wide">
+                      {token.name} <span className="text-[10px] text-gray-300">({token.symbol})</span>
                     </h2>
                   </div>
                   
                   <div className="flex justify-between items-center">
                     <div>
                       <p className="text-[9px] text-gray-400 uppercase tracking-wider font-medium">Market Cap</p>
-                      <p className="font-bold text-xs text-gray-400">${formatNumber(token.market_cap?.toString() || '0')}</p>
+                      <p className="font-bold text-xs text-gray-200">${formatNumber(token.market_cap?.toString() || '0')}</p>
                     </div>
                   </div>
                 </div>
@@ -251,9 +251,9 @@ export function TokenList() {
                   href={token.twitter_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="absolute top-2 right-2 bg-black/50 p-1 rounded-full hover:bg-black/70 transition-colors"
+                  className="absolute bottom-2 right-2 bg-gray-800/70 backdrop-blur-xl p-1.5 rounded-full hover:bg-gray-700/80 transition-all duration-300 border border-gray-600/50 hover:border-gray-500/70 shadow-lg"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="white" className="opacity-90">
                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                   </svg>
                 </a>
