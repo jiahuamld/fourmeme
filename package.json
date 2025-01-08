@@ -28,6 +28,9 @@
     "@stripe/react-stripe-js": "^2.8.1",
     "@stripe/stripe-js": "^4.8.0",
     "@t3-oss/env-nextjs": "^0.10.1",
+    "@tanstack/react-query": "^5.62.16",
+    "@web3modal/ethereum": "^2.7.1",
+    "@web3modal/wagmi": "^5.1.11",
     "antd": "^5.22.2",
     "axios": "^1.7.7",
     "canvas-confetti": "^1.9.3",
@@ -46,6 +49,7 @@
     "next-auth": "^4.24.7",
     "pg": "^8.13.1",
     "phaser": "^3.87.0",
+    "qrcode.react": "^4.2.0",
     "radix-ui": "^1.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -59,6 +63,7 @@
     "tesseract.js": "^5.1.1",
     "use-immer": "^0.10.0",
     "viem": "^2.22.4",
+    "wagmi": "^2.14.6",
     "zod": "^3.23.3"
   },
   "devDependencies": {
