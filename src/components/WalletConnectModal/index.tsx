@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { createWalletClient, custom, WalletClient, Chain } from 'viem';
 import { bsc } from 'viem/chains';
 import binanceIcon from '@/assets/Launcher/Wallet/binance.png';
+import metamaskIcon from '@/assets/Launcher/Wallet/metamask.png';
 import { QRCodeSVG } from 'qrcode.react';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useAccount, useConnect, useDisconnect, useBalance, usePublicClient } from 'wagmi';
@@ -33,6 +34,12 @@ const WalletConnectModal: React.FC<WalletConnectModalProps> = ({ open, onClose }
     address: '',
     type: null
   });
+
+  // 统一处理打开 WalletConnect
+  const handleOpenWalletConnect = async () => {
+    onClose();
+    await openWeb3Modal();
+  };
 
   useEffect(() => {
     if (isConnected && address) {
@@ -76,8 +83,7 @@ const WalletConnectModal: React.FC<WalletConnectModalProps> = ({ open, onClose }
       
       // 如果没有安装币安钱包，使用WalletConnect
       if (!binanceWallet) {
-        await openWeb3Modal();
-        // WalletConnect 连接信息会通过 useEffect 自动打印
+        await handleOpenWalletConnect();
         return;
       }
 
@@ -107,7 +113,59 @@ const WalletConnectModal: React.FC<WalletConnectModalProps> = ({ open, onClose }
         throw new Error('Failed to get wallet address');
       }
     } catch (error: any) {
+      // 如果用户拒绝连接，则使用 WalletConnect
+      if (error.message.includes('rejected') || error.message.includes('User rejected')) {
+        await handleOpenWalletConnect();
+        return;
+      }
       message.error(error.message || 'Failed to connect Binance Wallet');
+    }
+  };
+
+  const handleConnectMetaMask = async () => {
+    try {
+      if (connectedWallet.type) {
+        disconnectCurrentWallet();
+      }
+
+      const ethereum = (window as any).ethereum;
+      
+      // 严格检查是否真的是 MetaMask
+      if (!ethereum?.isMetaMask) {
+        await handleOpenWalletConnect();
+        return;
+      }
+
+      const client = createWalletClient({
+        chain: bsc,
+        transport: custom(ethereum)
+      });
+
+      const [address] = await client.requestAddresses();
+      setWalletClient(client);
+      
+      if (address) {
+        setConnectedWallet({ address, type: 'metamask' });
+        console.log('=== MetaMask 连接信息 ===');
+        console.log('钱包地址:', address);
+        console.log('连接状态: 已连接');
+        console.log('当前网络:', {
+          id: bsc.id,
+          name: bsc.name
+        });
+        console.log('==================');
+        message.success(`MetaMask Connected: ${address}`);
+        onClose();
+      } else {
+        throw new Error('Failed to get wallet address');
+      }
+    } catch (error: any) {
+      // 如果用户拒绝连接，则使用 WalletConnect
+      if (error.message.includes('rejected') || error.message.includes('User rejected')) {
+        await handleOpenWalletConnect();
+        return;
+      }
+      message.error(error.message || 'Failed to connect MetaMask');
     }
   };
 
@@ -134,7 +192,7 @@ const WalletConnectModal: React.FC<WalletConnectModalProps> = ({ open, onClose }
             First, connect one of the following wallets. Please securely store your private keys or mnemonic phrases and never share them with anyone.
           </p>
           <div className="space-y-3">
-            <div 
+          <div 
               onClick={handleConnectBinance}
               className="flex items-center p-3 hover:bg-[#1f1f1f] rounded-xl cursor-pointer transition-all"
             >
@@ -152,6 +210,26 @@ const WalletConnectModal: React.FC<WalletConnectModalProps> = ({ open, onClose }
                 <div className="text-sm text-gray-400">Binance Official Wallet</div>
               </div>
             </div>
+            <div 
+              onClick={handleConnectMetaMask}
+              className="flex items-center p-3 hover:bg-[#1f1f1f] rounded-xl cursor-pointer transition-all"
+            >
+              <div className="w-12 h-12 flex-shrink-0">
+                <Image 
+                  src={metamaskIcon}
+                  alt="MetaMask" 
+                  width={48} 
+                  height={48} 
+                  className="rounded-xl"
+                />
+              </div>
+              <div className="ml-3 flex-grow">
+                <div className="font-medium text-white">MetaMask</div>
+                <div className="text-sm text-gray-400">Most Popular Web3 Wallet</div>
+              </div>
+            </div>
+
+ 
           </div>
         </div>
 
