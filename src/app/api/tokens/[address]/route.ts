@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 // Get Token by address
 export async function GET(
@@ -11,13 +9,25 @@ export async function GET(
   try {
     const { address } = params;
 
-    const token = await prisma.Token.findUnique({
+    if (!address) {
+      return NextResponse.json(
+        {
+          code: 400,
+          message: 'Address is required'
+        },
+        { status: 400 }
+      );
+    }
+
+    console.log('Fetching token with address:', address);
+    const token = await prisma.token.findUnique({
       where: {
         contractAddress: address
       }
     });
 
     if (!token) {
+      console.log('Token not found for address:', address);
       return NextResponse.json(
         {
           code: 404,
@@ -32,13 +42,12 @@ export async function GET(
       data: token
     });
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Failed to get token:', errorMessage);
+    console.error('Failed to get token:', error);
     return NextResponse.json(
       {
         code: 500,
-        message: 'Failed to get token',
-        error: errorMessage
+        message: 'Internal server error',
+        error: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     );
@@ -53,8 +62,18 @@ export async function DELETE(
   try {
     const { address } = params;
 
+    if (!address) {
+      return NextResponse.json(
+        {
+          code: 400,
+          message: 'Address is required'
+        },
+        { status: 400 }
+      );
+    }
+
     // Check if token exists
-    const existingToken = await prisma.Token.findUnique({
+    const existingToken = await prisma.token.findUnique({
       where: {
         contractAddress: address
       }
@@ -71,7 +90,7 @@ export async function DELETE(
     }
 
     // Delete token
-    await prisma.Token.delete({
+    await prisma.token.delete({
       where: {
         contractAddress: address
       }
@@ -82,13 +101,12 @@ export async function DELETE(
       message: 'Token deleted successfully'
     });
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Failed to delete token:', errorMessage);
+    console.error('Failed to delete token:', error);
     return NextResponse.json(
       {
         code: 500,
-        message: 'Failed to delete token',
-        error: errorMessage
+        message: 'Internal server error',
+        error: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     );

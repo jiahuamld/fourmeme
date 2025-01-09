@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 // Get all tokens
 export async function GET(request: Request) {
@@ -51,13 +49,12 @@ export async function GET(request: Request) {
       }
     });
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Failed to get tokens:', errorMessage);
+    console.error('Failed to get tokens:', error);
     return NextResponse.json(
       { 
         code: 500,
         message: 'Failed to get token list',
-        error: errorMessage
+        error: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     );
@@ -122,9 +119,8 @@ export async function POST(request: Request) {
       message: 'Token created successfully'
     });
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Failed to create token:', errorMessage);
-    if (errorMessage.includes('Unique constraint failed')) {
+    console.error('Failed to create token:', error);
+    if (error instanceof Error && error.message.includes('Unique constraint failed')) {
       return NextResponse.json(
         { 
           code: 400,
@@ -138,7 +134,7 @@ export async function POST(request: Request) {
       { 
         code: 500,
         message: 'Failed to create token',
-        error: errorMessage
+        error: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     );
@@ -155,13 +151,12 @@ export async function DELETE() {
       message: 'All tokens deleted successfully'
     });
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Failed to delete tokens:', errorMessage);
+    console.error('Failed to delete tokens:', error);
     return NextResponse.json(
       { 
         code: 500,
         message: 'Failed to delete tokens',
-        error: errorMessage
+        error: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     );
