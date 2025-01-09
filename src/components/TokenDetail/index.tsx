@@ -163,7 +163,7 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
           {/* Left side - Chart */}
           <div className="md:col-span-5 flex flex-col">
             {/* Chart Container */}
-            <div className="overflow-hidden rounded-2xl border border-white/10 backdrop-blur-md bg-[#0D111C]/80 h-[700px] flex flex-col">
+            <div className="overflow-hidden rounded-[32px] border border-white/10 backdrop-blur-md bg-[#0D111C]/80 h-[700px] flex flex-col">
               {/* Token Info Bar */}
               <div className="p-4 border-b border-white/10 shrink-0">
                 <div className="flex items-center gap-4">
@@ -203,7 +203,7 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
                         </button>
                       </div>
                       <div className="flex items-center gap-2 ml-auto">
-                        <div className="flex items-stretch bg-[#0F172A] border border-[#2DD4BF] rounded-lg overflow-hidden">
+                        <div className="flex items-stretch bg-[#0F172A] border border-[#2DD4BF] rounded-[32px] overflow-hidden">
                           <div className="w-8 bg-[#2DD4BF] flex items-center justify-center">
                             <svg className="w-4 h-4 text-[#0F172A]" viewBox="0 0 24 24" fill="currentColor">
                               <path fillRule="evenodd" clipRule="evenodd" d="M12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4ZM6 8C6 4.68629 8.68629 2 12 2C15.3137 2 18 4.68629 18 8C18 11.3137 15.3137 14 12 14C8.68629 14 6 11.3137 6 8Z"/>
@@ -234,7 +234,7 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
           </div>
           
           {/* Right iframe - PancakeSwap */}
-          <div className="overflow-hidden h-[700px] md:col-span-2 rounded-2xl border border-white/10 backdrop-blur-md bg-white/5">
+          <div className="overflow-hidden h-[700px] md:col-span-2 rounded-[32px] border border-white/10 backdrop-blur-md bg-white/5">
             <iframe
               ref={pancakeSwapRef}
               src="https://pancakeswap.finance/"
@@ -289,17 +289,17 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="backdrop-blur-xl bg-white/5 border border-white/10 px-6 py-4 rounded-2xl">
+              <div className="backdrop-blur-xl bg-white/5 border border-white/10 px-6 py-4 rounded-[32px]">
                 <p className="text-gray-400 text-sm mb-1">Market Cap</p>
                 <p className="text-2xl font-bold text-white">${formatNumber(token.market_cap || 0)}</p>
               </div>
-              <div className="backdrop-blur-xl bg-white/5 border border-white/10 px-6 py-4 rounded-2xl">
+              <div className="backdrop-blur-xl bg-white/5 border border-white/10 px-6 py-4 rounded-[32px]">
                 <p className="text-gray-400 text-sm mb-1">24h Volume</p>
                 <p className="text-2xl font-bold text-white">${formatNumber(token.volume_24h || 0)}</p>
               </div>
             </div>
 
-            <div className="mt-4 backdrop-blur-xl bg-white/5 border border-white/10 px-6 py-4 rounded-2xl">
+            <div className="mt-4 backdrop-blur-xl bg-white/5 border border-white/10 px-6 py-4 rounded-[32px]">
               <div className="flex flex-col">
                 <p className="text-gray-400 text-sm mb-1">Contract Address</p>
                 <div className="flex items-center gap-2">
