@@ -13,14 +13,14 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: '/backendapi/:path*',
-  //       destination: 'https://backend.agiverse.io/api/v1/:path*',
-  //     },
-  //   ];
-  // },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: '/api/:path*',
+      },
+    ];
+  },
   images: {
     domains: ['public.agiverse.io', 'backend.agiverse.io', 'files.slack.com', 'pbs.twimg.com'],
   },

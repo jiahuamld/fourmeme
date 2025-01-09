@@ -62,7 +62,8 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
     const fetchTokenDetail = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/tokens/${address}`);
+        const baseUrl = window.location.origin;
+        const response = await fetch(`${baseUrl}/api/tokens/${address}`);
         const data = await response.json();
         
         if (data.code === 0) {
@@ -72,6 +73,7 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
         }
       } catch (error) {
         setError('获取Token详情时发生错误');
+        console.error('Error fetching token:', error);
       } finally {
         setLoading(false);
       }
