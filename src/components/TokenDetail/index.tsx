@@ -93,6 +93,10 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
     return num.toFixed(2);
   };
 
+  const getChainName = (chain: string) => {
+    return chain.toLowerCase() === 'bnb' ? 'bsc' : chain.toLowerCase();
+  };
+
   if (loading) {
     return (
       <div className="relative min-h-screen flex flex-col w-full">
@@ -234,7 +238,7 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
           <div className="overflow-hidden h-[800px] md:col-span-5 rounded-2xl border border-white/10 backdrop-blur-md bg-white/5">
             <iframe
               ref={geckoTerminalRef}
-              src={`https://www.geckoterminal.com/${token.chain}/pools/${token.contractAddress}?embed=1&info=0&swaps=0&grayscale=0&light_chart=0`}
+              src={`https://www.geckoterminal.com/${getChainName(token.chain)}/pools/${token.contractAddress}?embed=1&info=0&swaps=0&grayscale=0&light_chart=0`}
               className="w-full h-full"
               frameBorder="0"
               allow="clipboard-write"

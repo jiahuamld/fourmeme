@@ -10,12 +10,7 @@ export const prisma = global.prisma || new PrismaClient({
       url: process.env.POSTGRES_PRISMA_URL || process.env.DATABASE_URL
     }
   },
-  log: [
-    { emit: 'stdout', level: 'query' },
-    { emit: 'stdout', level: 'error' },
-    { emit: 'stdout', level: 'info' },
-    { emit: 'stdout', level: 'warn' },
-  ],
+  log: ['query', 'error', 'warn'],
 });
 
 if (process.env.NODE_ENV !== 'production') {
