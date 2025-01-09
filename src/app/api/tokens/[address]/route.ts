@@ -20,7 +20,7 @@ export async function GET(
     if (!token) {
       return NextResponse.json(
         {
-          success: false,
+          code: 404,
           message: 'Token not found'
         },
         { status: 404 }
@@ -28,7 +28,7 @@ export async function GET(
     }
 
     return NextResponse.json({
-      success: true,
+      code: 0,
       data: token
     });
   } catch (error: unknown) {
@@ -36,7 +36,7 @@ export async function GET(
     console.error('Failed to get token:', errorMessage);
     return NextResponse.json(
       {
-        success: false,
+        code: 500,
         message: 'Failed to get token',
         error: errorMessage
       },
@@ -63,7 +63,7 @@ export async function DELETE(
     if (!existingToken) {
       return NextResponse.json(
         {
-          success: false,
+          code: 404,
           message: 'Token not found'
         },
         { status: 404 }
@@ -78,7 +78,7 @@ export async function DELETE(
     });
 
     return NextResponse.json({
-      success: true,
+      code: 0,
       message: 'Token deleted successfully'
     });
   } catch (error: unknown) {
@@ -86,11 +86,11 @@ export async function DELETE(
     console.error('Failed to delete token:', errorMessage);
     return NextResponse.json(
       {
-        success: false,
+        code: 500,
         message: 'Failed to delete token',
         error: errorMessage
       },
       { status: 500 }
     );
   }
-} 
+}

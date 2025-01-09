@@ -7,7 +7,7 @@ export async function GET() {
     const result = await pool.query('SELECT version(), current_timestamp');
     
     return NextResponse.json({
-      success: true,
+      code: 0,
       database_version: result.rows[0].version,
       server_time: result.rows[0].current_timestamp,
       connection_info: {
@@ -21,7 +21,7 @@ export async function GET() {
     console.error('数据库连接测试失败:', error);
     return NextResponse.json(
       { 
-        success: false, 
+        code: 500, 
         message: '数据库连接测试失败',
         error: error instanceof Error ? error.message : '未知错误'
       },

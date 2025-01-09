@@ -65,7 +65,7 @@ const TokenDetail: FC<TokenDetailProps> = ({ address }) => {
         const response = await fetch(`/api/tokens/${address}`);
         const data = await response.json();
         
-        if (data.success) {
+        if (data.code === 0) {
           setToken(data.data);
         } else {
           setError(data.message || '获取Token详情失败');

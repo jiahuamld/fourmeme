@@ -42,7 +42,7 @@ export function TokenList() {
       const data = await response.json();
       console.log('Response:', data); // 调试日志
       
-      if (data.success) {
+      if (data.code === 0) {
         setTokens(data.data);
       } else {
         setError(data.message || 'Failed to fetch data');
