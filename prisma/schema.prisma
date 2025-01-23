@@ -12,25 +12,5 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model token {
-  id                String   @id @default(cuid())
-
-  name             String
-  symbol           String
-  deployer         String
-  userId           String
-  imageUrl         String
-  messageId        String
-  platform         String
-  contractAddress  String   @unique
-  chain            String
-  pair             String?
-
-  market_cap        Float?
-  volume_24h        Float?
-  twitter_url       String?
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
-} 
 
 
