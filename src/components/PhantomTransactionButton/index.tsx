@@ -15,53 +15,58 @@ export const PhantomTransactionButton: FC<PhantomTransactionButtonProps> = ({
     const [publicKey, setPublicKey] = useState<string>('');
     const [loading, setLoading] = useState(false);
 
-    // 检查钱包连接状态
-    const checkWalletConnection = async (provider: any) => {
-        try {
-            if (provider?.isConnected && provider.publicKey && provider.publicKey.toString()) {
-                setConnected(true);
-                setPublicKey(provider.publicKey.toString());
-                return true;
-            } else {
-                setConnected(false);
-                setPublicKey('');
-                return false;
-            }
-        } catch (error) {
-            console.error('检查钱包状态失败:', error);
-            setConnected(false);
-            setPublicKey('');
-            return false;
-        }
-    };
-
     // 检测 Phantom 钱包
     useEffect(() => {
-        const checkPhantomWallet = async () => {
-            if (typeof window !== 'undefined') {
-                try {
-                    const provider = (window as any).solana;
-                    if (provider?.isPhantom) {
-                        setPhantom(provider);
-                        await checkWalletConnection(provider);
+        if (typeof window !== 'undefined') {
+            const getProvider = () => {
+                if ('phantom' in window) {
+                    const provider = (window as any).phantom?.solana;
+                    if (provider?.isPhantom) return provider;
+                }
 
-                        // 监听连接状态变化
-                        provider.on('connect', () => checkWalletConnection(provider));
-                        provider.on('disconnect', () => {
-                            setConnected(false);
-                            setPublicKey('');
-                        });
-                        provider.on('accountChanged', () => checkWalletConnection(provider));
+                // 检查 Chrome 扩展方式
+                const provider = (window as any).solana;
+                if (provider?.isPhantom) return provider;
+
+                return null;
+            };
+
+            const provider = getProvider();
+            if (provider) {
+                setPhantom(provider);
+                
+                // 监听连接状态变化
+                provider.on('connect', (publicKey: any) => {
+                    console.log('Wallet connected:', publicKey.toString());
+                    setConnected(true);
+                    setPublicKey(publicKey.toString());
+                });
+
+                provider.on('disconnect', () => {
+                    console.log('Wallet disconnected');
+                    setConnected(false);
+                    setPublicKey('');
+                });
+
+                provider.on('accountChanged', (publicKey: any) => {
+                    if (publicKey) {
+                        console.log('Account changed:', publicKey.toString());
+                        setConnected(true);
+                        setPublicKey(publicKey.toString());
+                    } else {
+                        setConnected(false);
+                        setPublicKey('');
                     }
-                } catch (error) {
-                    console.error('检测钱包失败:', error);
+                });
+
+                // 检查初始状态
+                if (provider.isConnected && provider.publicKey) {
+                    setConnected(true);
+                    setPublicKey(provider.publicKey.toString());
                 }
             }
-        };
+        }
 
-        checkPhantomWallet();
-
-        // 清理函数
         return () => {
             if (phantom) {
                 phantom.removeAllListeners('connect');
@@ -76,30 +81,41 @@ export const PhantomTransactionButton: FC<PhantomTransactionButtonProps> = ({
         try {
             setLoading(true);
 
-            if (!phantom) {
+            // 重新获取 provider，确保状态最新
+            const getProvider = () => {
+                if ('phantom' in window) {
+                    const provider = (window as any).phantom?.solana;
+                    if (provider?.isPhantom) return provider;
+                }
+                const provider = (window as any).solana;
+                if (provider?.isPhantom) return provider;
+                return null;
+            };
+
+            const provider = getProvider();
+            
+            if (!provider) {
                 window.open('https://phantom.app/', '_blank');
                 return;
             }
-            
-            // 如果已经连接，只需要检查状态
-            if (phantom.isConnected) {
-                const isConnected = await checkWalletConnection(phantom);
-                if (isConnected) return;
-            }
 
-            // 尝试连接钱包
-            const { publicKey: walletPublicKey } = await phantom.connect();
-            if (walletPublicKey) {
-                console.log('Connected to wallet:', walletPublicKey.toString());
-                setPublicKey(walletPublicKey.toString());
-                setConnected(true);
-            } else {
-                throw new Error('连接成功但未获取到钱包地址');
+            try {
+                // 确保钱包已解锁并且可以连接
+                const resp = await provider.connect();
+                console.log("Phantom connected:", resp.publicKey.toString());
+            } catch (err: any) {
+                if (err.code === 4001) {
+                    // 用户拒绝了连接请求
+                    console.error('用户拒绝了连接请求');
+                    alert('您拒绝了连接请求');
+                } else {
+                    console.error('连接钱包时发生错误:', err);
+                    alert('连接钱包失败，请确保 Phantom 钱包已解锁');
+                }
             }
         } catch (error) {
             console.error('连接钱包失败:', error);
-            setConnected(false);
-            setPublicKey('');
+            alert('连接钱包失败，请刷新页面重试');
         } finally {
             setLoading(false);
         }
@@ -149,16 +165,21 @@ export const PhantomTransactionButton: FC<PhantomTransactionButtonProps> = ({
             }
             
             try {
-                // 使用 Phantom 钱包签名
-                const signedTransaction = await phantom.signTransaction(transaction);
-                console.log("交易已签名");
-
-                // 发送签名后的交易
-                const signature = await connection.sendRawTransaction(signedTransaction.serialize());
+                // 使用 Phantom 钱包签名并发送交易
+                const { signature } = await phantom.signAndSendTransaction(transaction, {
+                    skipPreflight: false,  // 是否跳过预检
+                    preflightCommitment: "confirmed",  // 预检的确认级别
+                    maxRetries: 3,  // 最大重试次数
+                });
+                
                 console.log("交易已发送，签名:", signature);
 
                 // 等待交易确认
-                await connection.confirmTransaction(signature);
+                const confirmation = await connection.confirmTransaction(signature);
+                if (confirmation.value.err) {
+                    throw new Error('交易确认失败');
+                }
+                
                 console.log("交易已确认");
                 alert('交易成功！');
             } catch (err) {
