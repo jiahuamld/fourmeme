@@ -29,10 +29,10 @@ export const Header = () => {
                 className="rounded-full"
               />
             </div>
-            <h1 className="ml-3 text-xl font-bold text-white">Launcher</h1>
+            <h1 className="ml-3 text-xl font-bold text-white">Solana</h1>
           </div>
           
-          <button
+          {/* <button
             onClick={showModal}
             className="inline-flex items-center px-6 py-2 text-sm font-medium rounded-lg text-black transition-opacity hover:opacity-90"
             style={{
@@ -40,7 +40,7 @@ export const Header = () => {
             }}
           >
             Connect Wallet
-          </button>
+          </button> */}
 
           <WalletConnectModal 
             open={isModalVisible}
