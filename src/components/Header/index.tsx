@@ -28,8 +28,13 @@ export const Header = () => {
                 height={40}
                 className="rounded-full"
               />
+<<<<<<< HEAD
             </div> */}
             {/* <h1 className="ml-3 text-xl font-bold text-white"></h1> */}
+=======
+            </div>
+            <h1 className="ml-3 text-xl font-bold text-white">Solana</h1>
+>>>>>>> main
           </div>
           
           {/* <button
