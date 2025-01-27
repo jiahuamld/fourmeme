@@ -1,7 +1,7 @@
 import { type Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Solana",
+  title: "",
   description: "",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 }; 
