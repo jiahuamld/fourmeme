@@ -6,20 +6,21 @@ import { FaXTwitter } from 'react-icons/fa6';
 
 export const Footer = () => {
   const links = [
-    { label: 'About us', href: '#' },
-    { label: 'Brand assets', href: '#' },
-    { label: 'Code of conduct', href: '#' },
-    { label: 'Jobs', href: '#' },
-    { label: 'Privacy policy', href: '#' },
-    { label: 'Terms of use', href: '#' },
-    { label: 'Cookie policy', href: '#' },
-    { label: 'Press Contact', href: '#', isExternal: true },
+    { label: '', href: '#' },
+    // { label: 'About us', href: '#' },
+    // { label: 'Brand assets', href: '#' },
+    // { label: 'Code of conduct', href: '#' },
+    // { label: 'Jobs', href: '#' },
+    // { label: 'Privacy policy', href: '#' },
+    // { label: 'Terms of use', href: '#' },
+    // { label: 'Cookie policy', href: '#' },
+    // { label: 'Press Contact', href: '#', isExternal: true },
   ];
 
   const socialLinks = [
-    { icon: <FaGithub className="w-6 h-6" />, href: '#', label: 'GitHub' },
+    { icon: <FaGithub className="w-6 h-6" />, href: 'https://github.com/unifai-network', label: 'GitHub' },
     { icon: <FaXTwitter className="w-6 h-6" />, href: '#', label: 'X' },
-    { icon: <FaDiscord className="w-6 h-6" />, href: '#', label: 'Discord' },
+    // { icon: <FaDiscord className="w-6 h-6" />, href: '#', label: 'Discord' },
   ];
 
   return (
