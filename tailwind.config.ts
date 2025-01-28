@@ -1,7 +1,5 @@
 import type { Config } from 'tailwindcss';
 import { fontFamily } from 'tailwindcss/defaultTheme';
-import { colors } from './data/config/colors';
-
 
 const config: Config = {
   darkMode: ['class', 'class'],
@@ -125,11 +123,11 @@ const config: Config = {
   				}
   			},
   			rainbow: {
-  				'0%': {
-  					'background-position': '0%'
+  				'0%, 100%': {
+  					'background-position': '0% 50%'
   				},
-  				'100%': {
-  					'background-position': '200%'
+  				'50%': {
+  					'background-position': '100% 50%'
   				}
   			},
   			breath: {
@@ -193,7 +191,7 @@ const config: Config = {
   			marquee: 'marquee var(--duration) infinite linear',
   			'border-beam': 'border-beam calc(var(--duration)*1s) infinite linear',
   			'background-position-spin': 'background-position-spin 3000ms infinite alternate',
-  			rainbow: 'rainbow var(--speed, 2s) infinite linear',
+  			rainbow: 'rainbow 3s linear infinite',
   			pulse: 'pulse var(--duration) ease-out infinite',
   			'breath-slow': 'breath 6s ease-in-out infinite',
   			breath: 'breath 3s ease-in-out infinite',

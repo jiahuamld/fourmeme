@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 import bgImage from '@/assets/home/screen1/bg.avif';
 import py from '@/assets/home/screen1/py.png';
 import js from '@/assets/home/screen1/js.png';
+import logo from '@/assets/home/screen1/logo.png';
 import Image from 'next/image';
 
 export default function Home() {
@@ -19,14 +20,14 @@ export default function Home() {
       }}
     >
       <div className="container mx-auto flex flex-col items-center justify-start h-full pt-[15vh]">
-        <h1 className="text-7xl font-bold text-white duration-300 ease-in-out tracking-wider drop-shadow-lg">
-          UnifAI
-        </h1>
-        <p className="mt-4 text-4xl font-semibold tracking-wide text-center max-w-5xl leading-relaxed bg-gradient-to-r from-gradient-start to-gradient-end bg-clip-text text-transparent">
+      <Image src={logo} alt="Python" width={220} height={200} className="mb-4" />
+        <p 
+          className="mt-6 text-4xl font-bold tracking-wide text-center max-w-4xl leading-relaxed bg-gradient-to-r from-[#fdebdf] to-[#959cfb] text-transparent bg-clip-text"
+        >
           An AI-Native Infrastructure For Dynamic Tools {'\n'}
           and Agent to Agent Communication
         </p>
-        <div className="mt-12 flex space-x-28">
+        <div className="mt-16 flex space-x-28">
           <div className="text-center">
             <Image src={py} alt="Python" width={200} height={200} className="mb-4" />
           </div>
